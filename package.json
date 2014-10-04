@@ -1,0 +1,19 @@
+{
+  "name": "mock-rest-api",
+  "version": "0.0.0",
+  "description": "Example application to mock RESTful API calls",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pon/mock-rest-api.git"
+  },
+  "author": "Peter Nagel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pon/mock-rest-api/issues"
+  },
+  "homepage": "https://github.com/pon/mock-rest-api"
+}
