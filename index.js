@@ -56,7 +56,13 @@ var routes = [
     path: '/users/{user_id}',
     config: {
       handler: function (request, reply) {
-        reply(users[request.params.user_id - 1]);
+        if (users[request.params.user_id - 1]) {
+          reply(users[request.params.user_id - 1]);
+        } else {
+           reply({
+            error: 'User Not Found'
+          }).code(404);
+        }
       }
     }
   },
@@ -85,12 +91,18 @@ var routes = [
     path: '/users/{user_id}',
     config: {
       handler: function (request, reply) {
-        reply({
-          id: users[request.params.user_id - 1].id,
-          name: request.payload.name || users[request.params.user_id - 1].name,
-          email: request.payload.email || users[request.params.user_id - 1].email
-        });
-      }
+        if (users[request.params.user_id - 1]) {
+          reply({
+            id: users[request.params.user_id - 1].id,
+            name: request.payload.name || users[request.params.user_id - 1].name,
+            email: request.payload.email || users[request.params.user_id - 1].email
+          });
+        } else {
+          reply({
+            error: 'User Not Found'
+          }).code(404);
+        }
+     }
     }
   },
   {
@@ -98,10 +110,51 @@ var routes = [
     path: '/users/{user_id}',
     config: {
       handler: function (request, reply) {
-        reply({
-          id: request.params.user_id,
-          deleted: true
-        });
+        var user = users[request.params.user_id - 1];
+        if (user) {
+          reply({
+            id: request.params.user_id,
+            deleted: true
+          });
+        } else {
+          reply({
+            error: 'User Not Found'
+          }).code(404);
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/users/{user_id}/posts',
+    config: {
+      handler: function (request, reply) {
+        var user = users[request.params.user_id - 1];
+        if (user) {
+          reply(user.posts);
+        } else {
+          reply({
+            error: 'User Not Found'
+          }).code(404);
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/users/{user_id}/posts/{post_id}',
+    config: {
+      handler: function (request, reply) {
+        var post = users[request.params.user_id - 1]
+          .posts[request.params.post_id - request.params.user_id - (request.params.user_id == 1 ? 0 : 1)];
+
+        if (post) {
+          reply(post);
+        } else {
+          reply({
+            error: 'Post Not Found'
+          }).code(404);
+        }
       }
     }
   }
