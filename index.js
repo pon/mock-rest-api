@@ -157,6 +157,94 @@ var routes = [
         }
       }
     }
+  },
+  {
+    method: 'POST',
+    path: '/users/{user_id}/posts',
+    config: {
+      handler: function (request, reply) {
+        var user = users[request.params.user_id - 1];
+        if (user) {
+          user.posts.push({
+            id: parseInt(user.posts[1].id) + 1,
+            title: request.payload.title,
+            body: request.payload.body
+          });
+          reply(user);
+        } else {
+          reply({
+            error: 'User Not Found'
+          }).code(404);
+        }
+      },
+      validate: {
+        payload: {
+          title: Joi.string().required(),
+          body: Joi.string().email().required()
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/{user_id}/posts/{post_id}',
+    config: {
+      handler: function (request, reply) {
+        var user = users[request.params.user_id - 1];
+        if (user) {
+          var post = user.posts[request.params.post_id - request.params.user_id - (request.params.user_id == 1 ? 0 : 1)];
+          if (post) {
+            reply({
+              id: request.params.post_id,
+              title: request.payload.title || post.title,
+              body: request.payload.body || post.body
+            });
+          } else {
+            reply({
+              error: 'Post Not Found'
+            }).code(404);
+          }
+
+        } else {
+          reply({
+            error: 'User Not Found'
+          }).code(404);
+        }
+      },
+      validate: {
+        payload: {
+          title: Joi.string().required(),
+          body: Joi.string().email().required()
+        }
+      }
+    }
+  },
+  {
+    method: 'DELETE',
+    path: '/users/{user_id}/posts/{post_id}',
+    config: {
+      handler: function (request, reply) {
+        var user = users[request.params.user_id - 1];
+        if (user) {
+          var post = user.posts[request.params.post_id - request.params.user_id - (request.params.user_id == 1 ? 0 : 1)];
+          if (post) {
+            reply({
+              id: request.params.post_id,
+              deleted: true
+            });
+          } else {
+            reply({
+              error: 'Post Not Found'
+            }).code(404);
+          }
+
+        } else {
+          reply({
+            error: 'User Not Found'
+          }).code(404);
+        }
+      }
+    }
   }
 ];
 
