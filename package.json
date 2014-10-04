@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/pon/mock-rest-api/issues"
   },
-  "homepage": "https://github.com/pon/mock-rest-api"
+  "homepage": "https://github.com/pon/mock-rest-api",
+  "dependencies": {
+    "hapi": "^6.11.0",
+    "joi": "^4.7.0"
+  }
 }
